@@ -27,9 +27,15 @@ files.each do |f|
             gh_link[0].remove
         end
 
+        h1_tag = page.css('h1')
+        if h1_tag.length > 0
+          h1_tag.remove
+        end
+
         item = {
-            title: page.css('title').text.strip(),
-            article: page.css('article').text.strip.gsub("\n", " ")
+          title: page.css('title').text.strip().chomp(' - Tyk Documentation'),
+          article: page.css('article').text.strip.gsub("\n", " "),
+          path: f.gsub(path, "").chomp("index.html")
         }
         items << item
     rescue
