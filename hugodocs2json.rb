@@ -32,10 +32,15 @@ files.each do |f|
           h1_tag.remove
         end
 
+        item_path = f.gsub(path, "").chomp("index.html")
+        item_section = item_path.split("/")[1]
+          .split("-").map(&:capitalize).join(" ")
+
         item = {
           title: page.css('title').text.strip().chomp(' - Tyk Documentation'),
           article: page.css('#main-content').text.strip.gsub("\n", " "),
-          path: f.gsub(path, "").chomp("index.html")
+          path: item_path,
+          section: item_section
         }
         items << item
     rescue
