@@ -2,6 +2,8 @@
 require 'nokogiri'
 require 'json'
 
+MAX_ARTICLE_SIZE = 20000
+
 path, output_file = ARGV[0], ARGV[1] || "output.json"
 
 if ARGV.length == 0
@@ -36,9 +38,15 @@ files.each do |f|
         item_section = item_path.split("/")[1]
           .split("-").map(&:capitalize).join(" ")
 
+        title = page.css('title').text.strip().chomp(' - Tyk Documentation')
+        article = page.css('#main-content').text.strip.gsub("\n", " ")
+        if article.length > 20000
+            puts "Article '#{title}' (#{item_path}) has #{article.length} bytes, cropping!"
+            article = article[0, MAX_ARTICLE_SIZE]
+        end
         item = {
-          title: page.css('title').text.strip().chomp(' - Tyk Documentation'),
-          article: page.css('#main-content').text.strip.gsub("\n", " "),
+          title: title,
+          article: article,
           path: item_path,
           section: item_section
         }
