@@ -2,7 +2,7 @@
 require 'nokogiri'
 require 'json'
 
-MAX_ARTICLE_SIZE = 20000
+MAX_ARTICLE_SIZE = 19743
 
 path, output_file = ARGV[0], ARGV[1] || "output.json"
 
