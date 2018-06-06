@@ -16,12 +16,9 @@ puts "Found #{files.length} files."
 
 items, skipped_files = [], 0
 
-skipped_files =0
-
 files.each do |f|
     begin
-        raw_html = File.read(f)
-        page = Nokogiri::HTML(raw_html)
+        page = Nokogiri::HTML(File.open(f))
 
         # Remove GH link:
         gh_link = page.css('.container-github')
@@ -40,7 +37,7 @@ files.each do |f|
 
         title = page.css('title').text.strip().chomp(' - Tyk Documentation')
         article = page.css('#main-content').text.strip.gsub("\n", " ")
-        if article.length > 20000
+        if article.length > MAX_ARTICLE_SIZE
             puts "Article '#{title}' (#{item_path}) has #{article.length} bytes, cropping!"
             article = article[0, MAX_ARTICLE_SIZE]
         end
