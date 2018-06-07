@@ -18,8 +18,7 @@ skipped_files =0
 
 files.each do |f|
     begin
-        raw_html = File.read(f)
-        page = Nokogiri::HTML(raw_html)
+        page = Nokogiri::HTML(File.open(f))
 
         # Remove GH link:
         gh_link = page.css('.container-github')
